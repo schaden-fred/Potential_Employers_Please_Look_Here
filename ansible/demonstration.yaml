@@ -1,0 +1,27 @@
+---
+- name: Colorize LS output.
+ansible.builtin.lineinfile:
+    path: /root/.bash_profile
+    regexp: '^alias ls='
+    line: alias ls='ls --color=auto'
+
+- name: Ensure that SELINUX is enabled.
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=enforcing
+
+#Ensure that /tmp/tempfile.txt exists.  If it does, don't change it.  If it does not exist, create it and make it accessable to all users.
+-name: Check that /tmp/tempfile.txt exists
+  stat:
+    path: /etc/tempfile.txt
+  register: tempfile_exists
+
+-name: Create /tmp/tempfile.txt
+  file:
+    path: /tmp/tempfile.txt
+    owner: ansible
+    group: ansible
+    state: touch
+    mode: '0777'
+  when: not tempfile_exists.stat.exists
