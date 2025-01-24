@@ -1,0 +1,102 @@
+# Create Nginx proxy, single pod.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-proxy
+  image: nginx
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500Mi"
+  ports:
+  # Revisit ports.
+  - containerPort: 443
+    name: nginx-proxy-https
+  - containerPort: 80
+    name: nginx-proxy-http-redirect
+---
+# Create Nginx web server deployment.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-backend-pod
+  template:
+    metadata:
+      labels:
+        app: nginx-backend-pod
+    spec:
+      containers:
+      - name: nginx-backend-container
+        image: nginx
+        resources:
+            requests:
+                memory: "64Mi"
+                cpu: "250m"
+            limits:
+                memory: "128Mi"
+                cpu: "500Mi"
+        ports:
+        # Revisit ports.
+        - containerPort: 80
+          name: nginx-backend-port
+---
+# Create a service for the nginx cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-backend
+spec:
+  selector:
+    app.kubernetes.io/name: nginx-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: nginx-backend-port
+---
+# Clone a git repo contaning the static webpage into the nginx web servers
+---
+# Create volume for the Postgresql database
+---
+# Create Postgresql server
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgresql-backend
+  image: postgresql
+  # Add volume mount for postgresql database
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500Mi"
+  ports:
+  # Revisit ports.
+  - containerPort: 5432
+    name: postgresql-backend-port
+---
+# Create Postgresql service
+
+---
+# External access to Nginx proxy on ports 443
+
+---
+# Allow Nginx proxy to access Nginx web server cluster.
+---
+# Configure Nginx proxy
+# Redirect port 80 to 443
+
+--- 
+# Allow from Nginx deployment pods to Postgres service on 5432
+

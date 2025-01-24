@@ -1,0 +1,3 @@
+A sample Kubernetes production environment, consisting of an Apache server deployment with a Postgres database, as well as a volume that stores static files for the Apache server(s).
+
+This is a demonstartion of Kubernetes only.  The sample_environmnet.yaml file will create the required objects in Kubernetes, The database is empty, the volume contains no files, and the Apache server is running its default configuration.
