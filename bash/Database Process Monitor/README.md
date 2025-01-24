@@ -14,4 +14,4 @@ To improve it, I'd break the code down into a the following sections.
 3. Define a function to query for each error condition, using the data in the array variable.  If any error condition is active, return a code for that error condition.
 4. Define a function to try and resolve the error, using the data in the array variable.
 5. Define a function to alert based on the returned code.  Alert behavior will vary depending on whether the system is Production or not.
-6. Inside a FOR loop, run each query, attempt to resolve if needed, and alert if needed.  Exit the loop once any single error condition has been detected and acted upon.
+6. Use a FOR or WHILE loop to run each query, attempt to resolve if needed, and alert if needed.  Exit the loop once any single error condition has been detected and acted upon.
